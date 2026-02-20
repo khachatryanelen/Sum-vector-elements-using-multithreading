@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <thread>
-#include <chrono>
 #include <mutex>
 
 std::vector<long long> fibCache;
@@ -18,7 +17,6 @@ long long fibonacci(size_t n) {
     long long result = fibonacci(n - 1) + fibonacci(n - 2);
 
     {
-        std::lock_guard<std::mutex> lock(mtx);
         fibCache[n] = result;
     }
 
@@ -40,7 +38,6 @@ int main(int argc, const char* argv[]) {
     long long r1 = 0;
     long long r2 = 0;
 
-    auto start = std::chrono::high_resolution_clock::now();
 
     std::thread t1(compute, n - 1, std::ref(r1));
     std::thread t2(compute, n - 2, std::ref(r2));
